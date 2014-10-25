@@ -2,7 +2,7 @@
 <html>
 <head>
  <meta charset="UTF-8" />
- <meta name="viewport" value="width=device-width,initial-scale=1,maximum-scale=1" />
+ <meta name="viewport" value="width=device-width, initial-scale=1, maximum-scale=1" />
   <script type="text/javascript" src="jquery-2.1.1.min.js" ></script>
   <style type="text/css">
     body{
@@ -11,7 +11,7 @@
   </style>
 </head>
 <body>
-<h1>What's Going on at #MozFest Right Now?</h1>
+<h1>What's Happening at #MozFest Right Now?</h1>
 <a href="#" id="rerender">what about now? (refresh)</a>
 <br><br>
 <a href="http://schedule.mozillafestival.org/">official schedule</a>
@@ -46,12 +46,14 @@
            sesh.startp < (now + (window.lookaheadMinutes * 60 * 1000)) && // and if it starts in < 20 minutes from now
            sesh.endp > now                            // and hsan't ended yet
           ){
+          console.log(sesh);
           var html = '<li>'
           html += '<strong>' + sesh.title + '</strong> '
           html += '— <span class="theme">' + sesh.theme + '</span> '
           html += '<br /><span class="details" style="text-align: left;">'
           html += '<span class="time">' + sesh.start.toString().slice(11, 16) +" - " + sesh.end.slice(11, 16) + '</span><br>'
           html += 'Location: <em>' + sesh.location + '</em>'
+          html += ' <a href="http://schedule.mozillafestival.org/#session/' + sesh.id + '">(link)</a>'
           html += '</span>'
           html += '<div class="facilitators" style="display:none">Facilitators: '
           if (!!sesh.facilitators) {
@@ -71,7 +73,6 @@
       $("#toggle_descr").show();
     }
     window.data = null;
-    $('#rerender').on('click', window.render);
     window.getSked = function(){
       $.ajax({
         dataType: "jsonp",
@@ -87,6 +88,8 @@
         }
       });
     }
+
+    $('#rerender').on('click', function(){ window.render(); window.getSked(); });
 
     $(function(){
       // if(! localStorage.)
