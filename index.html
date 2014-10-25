@@ -17,6 +17,7 @@
     // if(window.location.href.indexOf("localhost") > -1)
     //   url = "sked.json";
     window.minutes = 20;
+    window.lsKey = 'mozfestSked';
     window.render = function(){
       $('ul').empty();
       var now = +new Date();
@@ -28,7 +29,6 @@
            sesh.startp < (now + (window.minutes * 60 * 1000)) && // and if it starts in < 10 minutes from now
            sesh.endp > now                            // and hsan't ended yet
           ){
-          console.log(sesh)
           var html = '<li>'
           html += '<strong>' + sesh.title + '</strong> '
           html += '<span class="theme">' + sesh.theme + '</span> '
@@ -43,18 +43,37 @@
     }
     window.data = null;
     $('#rerender').on('click', window.render);
-    $(function(){
-      // if(! localStorage.)
+    window.getSked = function(){
       $.ajax({
         dataType: "jsonp",
         jsonpCalback: "jsonp",
         url: url,
         success: function(data){
           window.data = data;
-          // localStorage.('sked', data);
+          if (localStorage){
+            localStorage.setItem(window.lsKey, JSON.stringify(data));
+            console.log('wrote to localstorage')
+          }
           window.render();
         }
       });
+    }
+
+    $(function(){
+      // if(! localStorage.)
+      if (localStorage){
+        if(localStorage.getItem(window.lsKey)){
+          console.log('got from localstorage')
+          window.data = JSON.parse(localStorage.getItem(window.lsKey));
+          window.render();
+          window.getSked();
+        }else{
+          console.log('not in localstorage')
+          window.getSked();
+        }
+      }else{
+        window.getSked();
+      }
     });
   </script>
 </body>
