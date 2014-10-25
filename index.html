@@ -48,7 +48,7 @@
       }
     }
     window.data = null;
-    $('#rerender').on('click', window.render);
+    $('#rerender').on('click', function(){ window.render(); window.getSked(); });
     window.getSked = function(){
       $.ajax({
         dataType: "jsonp",
