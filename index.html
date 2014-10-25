@@ -1,0 +1,54 @@
+<!DOCTYPE>
+<html>
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" value="width=device-width, initial-scale=1" />
+  <script type="text/javascript" src="jquery-2.1.1.min.js" ></script>
+</head>
+<body>
+<h1>What's Going on at #MozFest Right Now?</h1>
+<a href="#" id="rerender">what about now? (refresh)</a>
+<p style="font-size: small;">Wanna make this better? Send us a <a href="https://github.com/jeremybmerrill/mozfestnow">Pull Request</a> </p>
+<ul id="now">
+  
+</ul>
+  <script type="text/javascript">
+    var url = "http://schedule.mozillafestival.org/api/sessions?callback=jsonp";
+    // if(window.location.href.indexOf("localhost") > -1)
+    //   url = "sked.json";
+    window.minutes = 20;
+    window.render = function(){
+      $('ul').empty();
+      var now = +new Date();
+      for(i=0; i<window.data.length; i++){
+        var sesh = window.data[i];
+        sesh.startp = Date.parse(sesh.start)
+        sesh.endp = Date.parse(sesh.end)
+        if(sesh.startp > (now - (window.minutes * 60 * 1000)) &&  // if it started < 10 minutes ago
+           sesh.startp < (now + (window.minutes * 60 * 1000)) && // and if it starts in < 10 minutes from now
+           sesh.endp > now                            // and hsan't ended yet
+          ){
+          console.log(sesh)
+          var html = '<li>'
+          html += '<strong>' + sesh.title + '</strong> '
+          html += '<span class="theme">' + sesh.theme + '</span> '
+          html += '<br /><span class="details" style="text-align: left;">'
+          html += '<span class="time">' + sesh.start +" - " + sesh.end + '</span> '
+          html += 'Location: <em>' + sesh.location + '</em>'
+          html += '</span>'
+          html += '</li>'
+          $('ul').append(html)
+        }
+      }
+    }
+    window.data = null;
+    $('#rerender').on('click', window.render);
+    $(function(){
+      $.getJSON(url, {}, function(data){
+        window.data = data;
+        window.render();
+      });
+    });
+  </script>
+</body>
+</html>
