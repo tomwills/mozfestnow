@@ -8,6 +8,10 @@
     body{
       font-family: serif;
     }
+    .column {
+      float: left;
+      width: 30%;
+    }
   </style>
 </head>
 <body>
@@ -19,9 +23,25 @@
 
 <hr />
 <p><a href="#" id="toggle_descr" style="display:none">Toggle Descriptions/Facilitators</a></p>
+<div class="column">
+<h2>Previously</h2>
+<ul id="previously">
+  <li>(Your internet is slow, but the schedule is loading... Bear with me here. We'll store it locally for next time.)</li>
+</ul>
+</div>
+<div class="column">
+<h2>Coming up</h2>
 <ul id="now">
   <li>(Your internet is slow, but the schedule is loading... Bear with me here. We'll store it locally for next time.)</li>
 </ul>
+</div>
+<div class="column">
+<h2>After that</h2>
+<ul id="next">
+  <li>(Your internet is slow, but the schedule is loading... Bear with me here. We'll store it locally for next time.)</li>
+</ul>
+</div>
+
 
   <script type="text/javascript">
     var url = "http://schedule.mozillafestival.org/api/sessions";
@@ -31,45 +51,60 @@
     window.lookaheadMinutes = 20;
     window.lsKey = 'mozfestSked';
     window.render = function(){
-      $('ul').empty();
-      var now = +new Date();
-      window.data.sort(function(sesh_a, sesh_b) {
-        var a = sesh_a.location.toLowerCase();
-        var b = sesh_b.location.toLowerCase();
-        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-      });
-      for(i=0; i<window.data.length; i++){
-        var sesh = window.data[i];
-        sesh.startp = Date.parse(sesh.start)
-        sesh.endp = Date.parse(sesh.end)
-        if(sesh.startp > (now - (window.lookbehindMinutes * 60 * 1000)) &&  // if it started < 10 minutes ago
-           sesh.startp < (now + (window.lookaheadMinutes * 60 * 1000)) && // and if it starts in < 20 minutes from now
-           sesh.endp > now                            // and hsan't ended yet
-          ){
-          console.log(sesh);
-          var html = '<li>'
-          html += '<strong>' + sesh.title + '</strong> '
-          html += '— <span class="theme">' + sesh.theme + '</span> '
-          html += '<br /><span class="details" style="text-align: left;">'
-          html += '<span class="time">' + sesh.start.toString().slice(11, 16) +" - " + sesh.end.slice(11, 16) + '</span><br>'
-          html += 'Location: <em>' + sesh.location + '</em>'
-          html += ' <a href="http://schedule.mozillafestival.org/#session/' + sesh.id + '">(link)</a>'
-          html += '</span>'
-          html += '<div class="facilitators" style="display:none">Facilitators: '
-          if (!!sesh.facilitators) {
-            for(j=0; j<sesh.facilitators.length; j++){
-              html += sesh.facilitators[j].name
-              if (j < sesh.facilitators.length-1) {
-                html += ", "
-              }
-            }
-          }
-          html += '</div>'
-          html += '<div class="description" style="display:none">Description: ' + sesh.description + '</div>'
-          html += '</li>'
-          $('ul').append(html)
-        }
+    $.each([ 'now', 'next','previously' ], function( index, timeframe ) {
+      if (timeframe === 'previously') {
+	    window.lookbehindMinutes = 70;
+	    window.lookaheadMinutes = -10;
+      };
+      if (timeframe === 'now') {
+	    window.lookbehindMinutes = 10;
+	    window.lookaheadMinutes = 20;
       }
+      if (timeframe === 'next') {
+	    window.lookbehindMinutes = -20;
+	    window.lookaheadMinutes = 80;
+      }
+      
+      $('ul#' + timeframe).empty();
+	var now = +new Date();
+	window.data.sort(function(sesh_a, sesh_b) {
+	  var a = sesh_a.location.toLowerCase();
+	  var b = sesh_b.location.toLowerCase();
+	  return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	});
+	for(i=0; i<window.data.length; i++){
+	  var sesh = window.data[i];
+	  sesh.startp = Date.parse(sesh.start)
+	  sesh.endp = Date.parse(sesh.end)
+	  if(sesh.startp > (now - (window.lookbehindMinutes * 60 * 1000)) &&  // if it started < 10 minutes ago
+	    sesh.startp < (now + (window.lookaheadMinutes * 60 * 1000)) && // and if it starts in < 20 minutes from now
+	    sesh.endp > now                            // and hsan't ended yet
+	    ){
+	    console.log(sesh);
+	    var html = '<li>'
+	    html += '<strong>' + sesh.title + '</strong> '
+	    html += '— <span class="theme">' + sesh.theme + '</span> '
+	    html += '<br /><span class="details" style="text-align: left;">'
+	    html += '<span class="time">' + sesh.start.toString().slice(11, 16) +" - " + sesh.end.slice(11, 16) + '</span><br>'
+	    html += 'Location: <em>' + sesh.location + '</em>'
+	    html += ' <a href="http://schedule.mozillafestival.org/#session/' + sesh.id + '">(link)</a>'
+	    html += '</span>'
+	    html += '<div class="facilitators" style="display:none">Facilitators: '
+	    if (!!sesh.facilitators) {
+	      for(j=0; j<sesh.facilitators.length; j++){
+		html += sesh.facilitators[j].name
+		if (j < sesh.facilitators.length-1) {
+		  html += ", "
+		}
+	      }
+	    }
+	    html += '</div>'
+	    html += '<div class="description" style="display:none">Description: ' + sesh.description + '</div>'
+	    html += '</li>'
+	    $('ul#' + timeframe).append(html)
+	  }
+	}
+      });
       $("#toggle_descr").show();
     }
     window.data = null;
@@ -108,8 +143,8 @@
       }
     });
     $("#toggle_descr").click(function() {
-      $("#now li .facilitators").slideToggle();
-      $("#now li .description").slideToggle();
+      $(".column li .facilitators").slideToggle();
+      $(".column li .description").slideToggle();
       return false;
     });
   </script>
