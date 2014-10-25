@@ -33,7 +33,7 @@
           html += '<strong>' + sesh.title + '</strong> '
           html += '<span class="theme">' + sesh.theme + '</span> '
           html += '<br /><span class="details" style="text-align: left;">'
-          html += '<span class="time">' + sesh.start +" - " + sesh.end + '</span> '
+          html += '<span class="time">' + sesh.start.toString().slice(11, 16) +" - " + sesh.end.slice(11, 16) + '</span> '
           html += 'Location: <em>' + sesh.location + '</em>'
           html += '</span>'
           html += '</li>'
