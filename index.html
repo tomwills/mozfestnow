@@ -13,7 +13,7 @@
   
 </ul>
   <script type="text/javascript">
-    var url = "http://schedule.mozillafestival.org/api/sessions?callback=jsonp";
+    var url = "http://schedule.mozillafestival.org/api/sessions";
     // if(window.location.href.indexOf("localhost") > -1)
     //   url = "sked.json";
     window.minutes = 20;
@@ -44,9 +44,16 @@
     window.data = null;
     $('#rerender').on('click', window.render);
     $(function(){
-      $.getJSON(url, {}, function(data){
-        window.data = data;
-        window.render();
+      // if(! localStorage.)
+      $.ajax({
+        dataType: "jsonp",
+        jsonpCalback: "jsonp",
+        url: url,
+        success: function(data){
+          window.data = data;
+          // localStorage.('sked', data);
+          window.render();
+        }
       });
     });
   </script>
