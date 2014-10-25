@@ -25,8 +25,8 @@
         var sesh = window.data[i];
         sesh.startp = Date.parse(sesh.start)
         sesh.endp = Date.parse(sesh.end)
-        if(sesh.startp > (now - (window.minutes * 60 * 1000)) &&  // if it started < 10 minutes ago
-           sesh.startp < (now + (window.minutes * 60 * 1000)) && // and if it starts in < 10 minutes from now
+        if(sesh.startp > (now - (window.minutes/2 * 60 * 1000)) &&  // if it started < 10 minutes ago
+           sesh.startp < (now + (window.minutes * 60 * 1000)) && // and if it starts in < 20 minutes from now
            sesh.endp > now                            // and hsan't ended yet
           ){
           var html = '<li>'
