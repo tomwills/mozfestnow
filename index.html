@@ -27,7 +27,7 @@
 <hr />
 <p><a href="#" id="toggle_descr" style="display:none">Toggle Descriptions/Facilitators</a></p>
 <div class="column">
-<h2>Previously</h2>
+<h2>Already started</h2>
 <ul id="previously">
   <li>(Your internet is slow, but the schedule is loading... Bear with me here. We'll store it locally for next time.)</li>
 </ul>
@@ -55,14 +55,17 @@
     window.lsKey = 'mozfestSked';
     window.render = function(){
     $.each([ 'now', 'next','previously' ], function( index, timeframe ) {
+      // events which started between ten hours ago and ten minutes ago
       if (timeframe === 'previously') {
-	    window.lookbehindMinutes = 70;
+	    window.lookbehindMinutes = 600;
 	    window.lookaheadMinutes = -10;
       };
+      // events which started up to 10 minutes ago, or are starting in the next 20 minutes
       if (timeframe === 'now') {
 	    window.lookbehindMinutes = 10;
 	    window.lookaheadMinutes = 20;
       }
+      // events which are at least 20 but less than 80 minutes away
       if (timeframe === 'next') {
 	    window.lookbehindMinutes = -20;
 	    window.lookaheadMinutes = 80;
@@ -79,8 +82,8 @@
 	  var sesh = window.data[i];
 	  sesh.startp = Date.parse(sesh.start)
 	  sesh.endp = Date.parse(sesh.end)
-	  if(sesh.startp > (now - (window.lookbehindMinutes * 60 * 1000)) &&  // if it started < 10 minutes ago
-	    sesh.startp < (now + (window.lookaheadMinutes * 60 * 1000)) && // and if it starts in < 20 minutes from now
+	  if(sesh.startp > (now - (window.lookbehindMinutes * 60 * 1000)) &&  // if it started < lookbehindMinutes minutes ago
+	    sesh.startp < (now + (window.lookaheadMinutes * 60 * 1000)) && // and if it starts in < lookaheadMinutes minutes from now
 	    sesh.endp > now                            // and hsan't ended yet
 	    ){
 	    console.log(sesh);
