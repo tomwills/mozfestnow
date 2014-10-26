@@ -5,10 +5,16 @@
  <meta name="viewport" value="width=device-width, initial-scale=1, maximum-scale=1" />
   <script type="text/javascript" src="jquery-2.1.1.min.js" ></script>
   <style type="text/css">
-    body{
+    body {
       font-family: "Comic Sans MS", "Marker Felt", cursive, serif;
     }
-
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .note {
+      font-style: italic;
+    }
     @media (min-width: 480px) {
       .column {
         float: left;
@@ -28,18 +34,21 @@
 <p><a href="#" id="toggle_descr" style="display:none">Toggle Descriptions/Facilitators</a></p>
 <div class="column">
 <h2>Already started</h2>
+<p class="note">Sessions started more than 10 mins ago</p>
 <ul id="previously">
   <li>(Your internet is slow, but the schedule is loading... Bear with me here. We'll store it locally for next time.)</li>
 </ul>
 </div>
 <div class="column">
 <h2>Coming up</h2>
+<p class="note">Sessions starting in the next 20 minutes, or started less than 10 mins ago</p>
 <ul id="now">
   <li>(Your internet is slow, but the schedule is loading... Bear with me here. We'll store it locally for next time.)</li>
 </ul>
 </div>
 <div class="column">
 <h2>After that</h2>
+<p class="note">Sessions starting betwen 20 and 80 minutes from now
 <ul id="next">
   <li>(Your internet is slow, but the schedule is loading... Bear with me here. We'll store it locally for next time.)</li>
 </ul>
