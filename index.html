@@ -15,10 +15,22 @@
     .note {
       font-style: italic;
     }
+    a.sesh-title {
+      color : brown; 
+      text-decoration: none;
+    }
+    li {
+      color: #334971;
+    }
     @media (min-width: 480px) {
       .column {
         float: left;
         width: 30%;
+        padding: 1%;
+        border-right:solid 1px black;
+      }
+      .next {
+        border: none; 
       }
     }
   </style>
@@ -46,7 +58,7 @@
   <li>(Your internet is slow, but the schedule is loading... Bear with me here. We'll store it locally for next time.)</li>
 </ul>
 </div>
-<div class="column">
+<div class="column next">
 <h2>After that</h2>
 <p class="note">Sessions starting between 20 and 80 minutes from now
 <ul id="next">
@@ -97,12 +109,11 @@
 	    ){
 	    console.log(sesh);
 	    var html = '<li>'
-	    html += '<strong>' + sesh.title + '</strong> '
+	    html += '<strong><a class="sesh-title" href="http://schedule.mozillafestival.org/#session/' + sesh.id + '">' + sesh.title + '</a></strong> '
 	    html += '— <span class="theme">' + sesh.theme + '</span> '
-	    html += '<br /><span class="details" style="text-align: left;">'
-	    html += '<span class="time">' + sesh.start.toString().slice(11, 16) +" - " + sesh.end.slice(11, 16) + '</span><br>'
-	    html += 'Location: <em>' + sesh.location + '</em>'
-	    html += ' <a href="http://schedule.mozillafestival.org/#session/' + sesh.id + '">(link)</a>'
+	    html += '<span class="details" style="text-align: left;">'
+	    html += '<span class="time"> ' + sesh.start.toString().slice(11, 16) +" - " + sesh.end.slice(11, 16) + '</span>'
+	    html += ' @ <em>' + sesh.location + '</em>'
 	    html += '</span>'
 	    html += '<div class="facilitators" style="display:none">Facilitators: '
 	    if (!!sesh.facilitators) {
